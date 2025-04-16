@@ -127,10 +127,10 @@ void AP_RCProtocol_Backend::configure_vtx(uint8_t band, uint8_t channel, uint8_t
     // map to TBS band A, B, E, Race, Airwave, LoRace
     switch (band) {
     case VTX_BAND_FATSHARK:
-        vtx.set_configured_band(AP_VideoTX::VideoBand::FATSHARK);
+        vtx.set_configured_band(AP_VIDEOTX_BAND_FATSHARK);
         break;
     case VTX_BAND_RACEBAND:
-        vtx.set_configured_band(AP_VideoTX::VideoBand::RACEBAND);
+        vtx.set_configured_band(AP_VIDEOTX_BAND_RACEBAND);
         break;
     case VTX_BAND_E_BAND:
         vtx.set_configured_band(AP_VideoTX::VideoBand::BAND_E);
@@ -165,7 +165,7 @@ void AP_RCProtocol_Backend::configure_vtx(uint8_t band, uint8_t channel, uint8_t
         vtx.set_configured_power_mw(400);
         break;
     case VTX_POWER_601_PLUS:
-        vtx.set_configured_power_mw(800);
+        vtx.set_configured_power_mw(VTX_MAX_POWER_LEVEL);
         break;
     default:
         break;
