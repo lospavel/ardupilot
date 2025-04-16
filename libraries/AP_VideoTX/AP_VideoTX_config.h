@@ -15,3 +15,10 @@
 #define AP_SMARTAUDIO_ENABLED AP_VIDEOTX_ENABLED
 #endif
 
+// List supported VTX
+#define VTX_ARDUPILOT_STANDART 0
+#define VTX_AKK_TX5000AC 1
+#define VTX_AKK_ALPHA_4  2
+
+// Select VTX 
+#define AP_VIDEOTX_NAME VTX_AKK_ALPHA_4

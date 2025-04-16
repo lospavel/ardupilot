@@ -21,7 +21,23 @@
 #include <AP_Param/AP_Param.h>
 
 #define VTX_MAX_CHANNELS 8
+
+#if !defined(AP_VIDEOTX_NAME) || (AP_VIDEOTX_NAME == VTX_ARDUPILOT_STANDART)
+// Standart Ardupilot
 #define VTX_MAX_POWER_LEVELS 10
+#define VTX_MAX_POWER_LEVEL  800
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_TX5000AC
+// AKK TX5000AC
+#define VTX_MAX_POWER_LEVELS 8
+#define VTX_MAX_POWER_LEVEL  5000
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_ALPHA_4
+// AKK Alpha 4
+#define VTX_MAX_POWER_LEVELS 7
+#define VTX_MAX_POWER_LEVEL  4000
+
+#endif
 
 class AP_VideoTX {
 public:
@@ -55,6 +71,8 @@ public:
 
     static const char *band_names[];
 
+#if !defined(AP_VIDEOTX_NAME) || (AP_VIDEOTX_NAME == VTX_ARDUPILOT_STANDART)
+    // Standart Ardupilot
     enum VideoBand {
         BAND_A,
         BAND_B,
@@ -69,6 +87,53 @@ public:
         BAND_3G3_B,
         MAX_BANDS
     };
+
+#define AP_VIDEOTX_BAND_FATSHARK AP_VideoTX::VideoBand::FATSHARK
+#define AP_VIDEOTX_BAND_RACEBAND AP_VideoTX::VideoBand::RACEBAND
+#define AP_VIDEOTX_BAND_RACEBAND AP_VideoTX::VideoBand::RACEBAND
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_TX5000AC
+    // AKK TX5000AC
+    enum VideoBand {
+        BAND_A,
+        BAND_B,
+        BAND_E,
+        BAND_F,
+        BAND_r,
+        BAND_P,
+        BAND_L,
+        BAND_U,
+        BAND_O,
+        BAND_H,
+        BAND_T,
+        BAND_n,
+        MAX_BANDS
+    };
+
+#define AP_VIDEOTX_BAND_FATSHARK AP_VideoTX::VideoBand::BAND_F
+#define AP_VIDEOTX_BAND_RACEBAND AP_VideoTX::VideoBand::BAND_r
+    
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_ALPHA_4
+    // AKK Alpha 4
+    enum VideoBand {
+        BAND_A,
+        BAND_B,
+        BAND_E,
+        BAND_F,
+        BAND_r,
+        BAND_P,
+        BAND_L,
+        BAND_U,
+        BAND_O,
+        BAND_X,
+        MAX_BANDS
+    };
+
+#define AP_VIDEOTX_BAND_FATSHARK AP_VideoTX::VideoBand::BAND_F
+#define AP_VIDEOTX_BAND_RACEBAND AP_VideoTX::VideoBand::BAND_r
+
+#endif
 
     enum class PowerActive {
         Unknown,

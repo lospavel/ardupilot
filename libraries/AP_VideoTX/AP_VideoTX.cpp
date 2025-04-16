@@ -87,10 +87,25 @@ const AP_Param::GroupInfo AP_VideoTX::var_info[] = {
 
 extern const AP_HAL::HAL& hal;
 
+#if !defined(AP_VIDEOTX_NAME) || (AP_VIDEOTX_NAME == VTX_ARDUPILOT_STANDART)
+// Standart Ardupilot
 const char * AP_VideoTX::band_names[] = {"A","B","E","F","R","L","1G3_A","1G3_B","X","3G3_A","3G3_B"};
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_TX5000AC
+// AKK TX5000AC
+const char * AP_VideoTX::band_names[] = {"A","B","E","F","r","P","L","U","O","H","T","n"};
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_ALPHA_4
+// AKK Alpha 4
+const char * AP_VideoTX::band_names[] = {"A","B","E","F","r","P","L","U","O","X"};
+
+#endif
 
 const uint16_t AP_VideoTX::VIDEO_CHANNELS[AP_VideoTX::MAX_BANDS][VTX_MAX_CHANNELS] =
 {
+
+#if !defined(AP_VIDEOTX_NAME) || (AP_VIDEOTX_NAME == VTX_ARDUPILOT_STANDART)
+    // Standart Ardupilot
     { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725}, /* Band A */
     { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866}, /* Band B */
     { 5705, 5685, 5665, 5645, 5885, 5905, 5925, 5945}, /* Band E */
@@ -99,9 +114,36 @@ const uint16_t AP_VideoTX::VIDEO_CHANNELS[AP_VideoTX::MAX_BANDS][VTX_MAX_CHANNEL
     { 5621, 5584, 5547, 5510, 5473, 5436, 5399, 5362}, /* LO Race */
     { 1080, 1120, 1160, 1200, 1240, 1280, 1320, 1360}, /* Band 1G3_A */
     { 1080, 1120, 1160, 1200, 1258, 1280, 1320, 1360}, /* Band 1G3_B */
+    { 4990, 5020, 5050, 5080, 5110, 5140, 5170, 5200}  /* Band X */
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_TX5000AC
+    // AKK TX5000AC
+    { 5474, 5492, 5510, 5528, 5546, 5564, 5582, 5600}, /* Band A */
+    { 5362, 5399, 5436, 5473, 5510, 5547, 5584, 5621}, /* Band B */
+    { 5325, 5348, 5366, 5384, 5402, 5420, 5438, 5456}, /* Band E */
+    { 5129, 5259, 5189, 5219, 5249, 5279, 5309, 5339}, /* Band F */
+    { 4990, 5020, 5050, 5080, 5110, 5140, 5170, 5200}, /* Band r */
+    { 5333, 5373, 5413, 5453, 5493, 5533, 5573, 5613}, /* Band P */
+    { 4900, 4940, 4921, 4958, 4995, 5032, 5069, 5099}, /* Band L */
+    { 5960, 5980, 6000, 6020, 6030, 6040, 6050, 6060}, /* Band U */
+    { 5865, 5845, 5825, 5805, 5785, 5765, 5746, 5725}, /* Band O */
+    { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866}, /* Band H */
+    { 5705, 5685, 5665, 5645, 5885, 5905, 5925, 5945}, /* Band T */
+    { 5740, 5760, 5780, 5800, 5820, 5840, 5860, 5880}  /* Band n */
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_ALPHA_4
+    // AKK Alpha 4
+    { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725}, /* Band A */
+    { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866}, /* Band B */
+    { 5705, 5685, 5665, 5645, 5885, 5905, 5925, 5945}, /* Band E */
+    { 5740, 5760, 5780, 5800, 5820, 5840, 5860, 5880}, /* Band E */
+    { 5658, 5695, 5732, 5769, 5806, 5843, 5880, 5917}, /* Band r */
+    { 5653, 5693, 5733, 5773, 5813, 5853, 5893, 5933}, /* Band P */
+    { 5333, 5373, 5413, 5453, 5493, 5533, 5573, 5613}, /* Band L */
+    { 5325, 5348, 5366, 5384, 5402, 5420, 5438, 5456}, /* Band U */
+    { 5474, 5492, 5510, 5528, 5546, 5564, 5582, 5600}, /* Band O */
     { 4990, 5020, 5050, 5080, 5110, 5140, 5170, 5200}, /* Band X */
-    { 3330, 3350, 3370, 3390, 3410, 3430, 3450, 3470}, /* Band 3G3_A */
-    { 3170, 3190, 3210, 3230, 3250, 3270, 3290, 3310}  /* Band 3G3_B */
+#endif
 };
 
 // mapping of power level to milliwatt to dbm
@@ -110,6 +152,9 @@ const uint16_t AP_VideoTX::VIDEO_CHANNELS[AP_VideoTX::MAX_BANDS][VTX_MAX_CHANNEL
 AP_VideoTX::PowerLevel AP_VideoTX::_power_levels[VTX_MAX_POWER_LEVELS] = {
     // level, mw, dbm, dac
     { 0xFF,  0,    0, 0    }, // only in SA 2.1
+
+#if !defined(AP_VIDEOTX_NAME) || (AP_VIDEOTX_NAME == VTX_ARDUPILOT_STANDART)
+    // Standart Ardupilot
     { 0,    25,   14, 7    },
     { 0x11, 100,  20, 0xFF }, // only in SA 2.1
     { 1,    200,  23, 16   },
@@ -118,6 +163,27 @@ AP_VideoTX::PowerLevel AP_VideoTX::_power_levels[VTX_MAX_POWER_LEVELS] = {
     { 0x12, 600,  28, 0xFF }, // Tramp lies above power levels and always returns 25/100/200/400/600
     { 3,    800,  29, 40   },
     { 0x13, 1000, 30, 0xFF }, // only in SA 2.1
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_TX5000AC
+    // AKK TX5000AC
+
+    { 0,    25,   14, 7    },
+    { 1,    200,  23, 16   },
+    { 2,    500,  27, 25   },
+    { 3,    1000, 30, 40   },
+    { 4,    3000, 35, 255  },
+    { 5,    5000, 37, 255  },
+
+#elif AP_VIDEOTX_NAME == VTX_AKK_ALPHA_4
+    // AKK Alpha 4
+    { 0,    25,   14, 1   },
+    { 1,    1000, 30, 2   },
+    { 2,    2000, 33, 3   },
+    { 3,    3000, 35, 4   },
+    { 4,    4000, 36, 5   },
+
+#endif
+
     { 0xFF, 0,    0,  0XFF, PowerActive::Inactive }  // slot reserved for a custom power level
 };
 
